@@ -7,20 +7,20 @@ import Theme from '../providers/Theme';
 type IssueType = {
   summary: string,
   id: string,
-  key: string
+  key: string,
 };
 type IssueProps = {
   issue: IssueType,
-  updateSummary: Function
+  updateSummary: Function,
 };
 type IssueState = {
   summary: string,
-  previousSummary: string
+  previousSummary: string,
 };
 type IssuesTableProps = {
   updateSummary: Function,
   subscribeToJiraIssueUpdate: Function,
-  issues: Array<IssueType>
+  issues: Array<IssueType>,
 };
 
 const Panel = styled.div`
@@ -57,7 +57,7 @@ const IssueRow = styled.div`
 export class Issue extends Component<IssueProps, IssueState> {
   state = {
     summary: this.props.issue.summary,
-    previousSummary: this.props.issue.summary
+    previousSummary: this.props.issue.summary,
   };
 
   componentWillUpdate({ issue }: IssueProps, { summary }: IssueState) {
@@ -65,15 +65,18 @@ export class Issue extends Component<IssueProps, IssueState> {
       this.setState({ summary: issue.summary, previousSummary: issue.summary });
     }
   }
+
   handleChange = (e: any) => {
     const summary = e.target.value;
     this.setState({ summary });
   };
+
   handleConfirm = (e: any) => {
     this.props.updateSummary({
-      variables: { id: this.props.issue.id, summary: this.state.summary }
+      variables: { id: this.props.issue.id, summary: this.state.summary },
     });
   };
+
   handleCancel = () => {
     this.setState({ summary: this.state.previousSummary });
   };
@@ -117,12 +120,15 @@ export class Issue extends Component<IssueProps, IssueState> {
 
 class IssuesTable extends Component<IssuesTableProps> {
   unsubscribe: Function;
+
   componentDidMount() {
     this.unsubscribe = this.props.subscribeToJiraIssueUpdate();
   }
+
   componentWillUnmount() {
     this.unsubscribe();
   }
+
   render() {
     const { issues } = this.props;
     return (
@@ -132,11 +138,7 @@ class IssuesTable extends Component<IssuesTableProps> {
             <h1>My latest issues</h1>
             <div className="body">
               {issues.map(issue => (
-                <Issue
-                  issue={issue}
-                  key={issue.id}
-                  updateSummary={this.props.updateSummary}
-                />
+                <Issue issue={issue} key={issue.id} updateSummary={this.props.updateSummary} />
               ))}
             </div>
           </Panel>

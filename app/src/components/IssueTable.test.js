@@ -6,7 +6,7 @@ import IssueTable, { Issue } from './IssueTable';
 const issue = {
   summary: 'foo',
   id: 'bar',
-  key: 'baz'
+  key: 'baz',
 };
 describe('<Issue />', () => {
   it('renders without crashing', () => {
@@ -26,9 +26,7 @@ describe('<Issue />', () => {
   describe('handleConfirm', () => {
     it('updates the state', () => {
       const updateSummary = jest.fn();
-      const wrapper = shallow(
-        <Issue issue={issue} updateSummary={updateSummary} />
-      );
+      const wrapper = shallow(<Issue issue={issue} updateSummary={updateSummary} />);
       wrapper.instance().handleConfirm({ target: { value: 'new value' } });
       expect(updateSummary.mock.calls.length).toBe(1);
     });
@@ -50,19 +48,13 @@ describe('<IssueTable />', () => {
     shallow(<IssueTable subscribeToJiraIssueUpdate={() => ({})} />);
   });
   it('matches the snapshot', () => {
-    const tree = renderer
-      .create(
-        <IssueTable subscribeToJiraIssueUpdate={() => ({})} issues={[]} />
-      )
-      .toJSON();
+    const tree = renderer.create(<IssueTable subscribeToJiraIssueUpdate={() => ({})} issues={[]} />).toJSON();
     expect(tree).toMatchSnapshot();
   });
   it('subscribes/unsubscribes to jira issue updates', () => {
     const unsubscribe = jest.fn();
     const subscribe = jest.fn().mockReturnValue(unsubscribe);
-    const component = shallow(
-      <IssueTable subscribeToJiraIssueUpdate={subscribe} />
-    );
+    const component = shallow(<IssueTable subscribeToJiraIssueUpdate={subscribe} />);
     expect(subscribe.mock.calls.length).toBe(1);
     component.unmount();
     expect(unsubscribe.mock.calls.length).toBe(1);
